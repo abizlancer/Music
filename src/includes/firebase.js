@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCO_ST7vr1L83Qwm0cBdR9un-bJJ6izLBc",
@@ -8,4 +9,15 @@ const firebaseConfig = {
   storageBucket: "music-ea4ca.appspot.com",
   appId: "1:224474492657:web:a6ed16c803976e201fc350"
 };
-export default firebase.initializeApp(firebaseConfig)
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+const usersCollection = db.collection("users");
+
+export {
+  auth,
+  db,
+  usersCollection
+}
