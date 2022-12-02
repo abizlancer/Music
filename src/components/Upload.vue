@@ -18,6 +18,7 @@
         @drop.prevent.stop="upload($event)">
         <h5>Drop your files here</h5>
       </div>
+      <input type="file" multiple @change="upload($event)">
       <hr class="my-6" />
       <!-- Progess Bars -->
       <div class="mb-4" v-for="upload in uploads" :key="upload.name">
@@ -49,8 +50,13 @@ export default {
   methods: {
     upload($event) {
       this.is_dragover = false
+      console.log($event);
       
-      const files = [...$event.dataTransfer.files]
+      const files = $event.dataTransfer 
+        ? [...$event.dataTransfer.files]
+        : [...$event.target.files]
+        
+      
       files.forEach((file) => {
         if(file.type !== 'audio/mpeg') {
           return
@@ -74,7 +80,7 @@ export default {
         }, (error) => {
           this.uploads[uploadIndex].variant = "bg-red-400";
           this.uploads[uploadIndex].icon = "fas fa-times";
-          this.upload[uploadIndex].text_class = "text-red-400"
+          this.uploads[uploadIndex].text_class = "text-red-400"
           console.log(error);
         }, async () => {
           const song = {
@@ -91,10 +97,20 @@ export default {
           
           this.uploads[uploadIndex].variant = "bg-green-400";
           this.uploads[uploadIndex].icon = "fas fa-check";
-          this.upload[uploadIndex].text_class = "text-green-400"
+          this.uploads[uploadIndex].text_class = "text-green-400"
         })
       });
+    },
+    cancelUpload() {
+      this.uploads.forEach((upload) => {
+      upload.task.cancel();
+    })
     }
+  },
+  beforeUnmount() {
+    this.uploads.forEach((upload) => {
+      upload.task.cancel();
+    })
   },
 }
 </script>
