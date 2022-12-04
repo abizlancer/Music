@@ -3,12 +3,12 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage"
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCO_ST7vr1L83Qwm0cBdR9un-bJJ6izLBc",
-  authDomain: "music-ea4ca.firebaseapp.com",
-  projectId: "music-ea4ca",
-  storageBucket: "music-ea4ca.appspot.com",
-  appId: "1:224474492657:web:a6ed16c803976e201fc350"
+const firebaseConfig = {  
+  apiKey: "AIzaSyBgqIHIX0S3s0PzTJLi_2PgDKn7_xSWB7E",
+  authDomain: "music-4c96e.firebaseapp.com",
+  projectId: "music-4c96e",
+  storageBucket: "music-4c96e.appspot.com",
+  appId: "1:260844384655:web:d117123b07f44cc41a9bfa"
 };
 firebase.initializeApp(firebaseConfig);
 
