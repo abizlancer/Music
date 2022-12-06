@@ -33,6 +33,10 @@ const routes = [
     redirect: { name: "manage" },
   },
   {
+    name: "song",
+    path: "/song/:id"
+  },
+  {
     path: "/:catchAll(.*)*",
     redirect: { name: "home" },
   },
