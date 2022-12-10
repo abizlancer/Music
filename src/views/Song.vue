@@ -34,7 +34,7 @@
           <div class="text-white text-center font-bold p-4 mb-4" v-if="comment_show_alert" :class="comment_alert_variant">
             {{ comment_alert_message }}
           </div>
-          <vee-form :validation-schema="schema" @submit="addComment">
+          <vee-form :validation-schema="schema" @submit="addComment" v-if="userLoggedIn">
             <vee-field as="textarea" name="comment"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
               placeholder="Your comment here..."
@@ -49,7 +49,7 @@
             </button>
           </vee-form>
           <!-- Sort Comments -->
-          <select
+          <select v-model="sort"
             class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           >
             <option value="1">Latest</option>
@@ -60,83 +60,22 @@
     </section>
     <!-- Comments -->
     <ul class="container mx-auto">
-      <li class="p-6 bg-gray-50 border border-gray-200">
+      <li class="p-6 bg-gray-50 border border-gray-200" v-for="comment in sortedComments" :key="comment.docID">
         <!-- Comment Author -->
         <div class="mb-5">
-          <div class="font-bold">Elaine Dreyfuss</div>
-          <time>5 mins ago</time>
+          <div class="font-bold">{{ comment.name }}</div>
+          <time>{{ comment.datePosted }}</time>
         </div>
 
-        <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium der doloremque laudantium.
-        </p>
-      </li>
-      <li class="p-6 bg-gray-50 border border-gray-200">
-        <!-- Comment Author -->
-        <div class="mb-5">
-          <div class="font-bold">Elaine Dreyfuss</div>
-          <time>5 mins ago</time>
-        </div>
-
-        <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium der doloremque laudantium.
-        </p>
-      </li>
-      <li class="p-6 bg-gray-50 border border-gray-200">
-        <!-- Comment Author -->
-        <div class="mb-5">
-          <div class="font-bold">Elaine Dreyfuss</div>
-          <time>5 mins ago</time>
-        </div>
-
-        <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium der doloremque laudantium.
-        </p>
-      </li>
-      <li class="p-6 bg-gray-50 border border-gray-200">
-        <!-- Comment Author -->
-        <div class="mb-5">
-          <div class="font-bold">Elaine Dreyfuss</div>
-          <time>5 mins ago</time>
-        </div>
-
-        <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium der doloremque laudantium.
-        </p>
-      </li>
-      <li class="p-6 bg-gray-50 border border-gray-200">
-        <!-- Comment Author -->
-        <div class="mb-5">
-          <div class="font-bold">Elaine Dreyfuss</div>
-          <time>5 mins ago</time>
-        </div>
-
-        <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium der doloremque laudantium.
-        </p>
-      </li>
-      <li class="p-6 bg-gray-50 border border-gray-200">
-        <!-- Comment Author -->
-        <div class="mb-5">
-          <div class="font-bold">Elaine Dreyfuss</div>
-          <time>5 mins ago</time>
-        </div>
-
-        <p>
-          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-          accusantium der doloremque laudantium.
-        </p>
+        <p>{{ comment.content }}</p>
       </li>
     </ul>
 </template>
 
 <script>
 import { songsCollection, auth, commentsCollection } from '../includes/firebase';
+import { mapState } from "pinia";
+import useUserStore from "../stores/user"
 
 export default {
   name: "Song",
@@ -150,6 +89,19 @@ export default {
       comment_show_alert: false,
       comment_alert_variant: "bg-blue-500",
       comment_alert_message: "Please wait! Your comment is being submitted",
+      comments: [],
+      sort: '1',
+    }
+  },
+  computed: {
+    ...mapState(useUserStore, ["userLoggedIn"]),
+    sortedComments() {
+      return this.comments.slice().sort((a, b) => {
+        if(this.sort === '1') {
+          return new Date(b.datePosted) - new Date(a.datePosted)
+        }
+        return new Date(a.datePosted) - new Date(b.datePosted)
+      })
     }
   },
   async created() {
@@ -160,6 +112,7 @@ export default {
       return
     }
     this.song = docSnapshot.data()
+    this.getComments()
   },
   methods: {
     async addComment(values, { resetForm }) {
@@ -177,12 +130,24 @@ export default {
       }
       
       await commentsCollection.add(comment)
+      this.getComments()
       
       this.comment_in_submission = false
       this.comment_alert_variant = "bg-green-500"
       this.comment_alert_message = "Comment added!"
       resetForm();
     },
+    async getComments() {
+      const snapshots = await commentsCollection.where('sid', '==', this.$route.params.id).get();
+      this.comments = []
+      
+      snapshots.forEach((doc) => {
+        this.comments.push({
+          docID: doc.id,
+          ...doc.data()
+        })
+      })
+    }
   },
 }
 </script>
