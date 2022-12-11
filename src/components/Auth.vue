@@ -1,4 +1,5 @@
 <template>
+  <!-- Auth Modal -->
   <div
     class="fixed z-10 inset-0 overflow-y-auto"
     id="modal"
@@ -27,7 +28,7 @@
             <!-- Modal Close Button -->
             <div
               class="modal-close cursor-pointer z-50"
-              @click.prevent="modalVisibility = false"
+              @click="modalVisibility = false"
             >
               <i class="fas fa-times"></i>
             </div>
@@ -39,11 +40,11 @@
               <a
                 class="block rounded py-3 px-4 transition"
                 href="#"
+                @click.prevent="tab = 'login'"
                 :class="{
                   'hover:text-white text-white bg-blue-600': tab === 'login',
                   'hover:text-blue-600': tab === 'register',
                 }"
-                @click.prevent="tab = 'login'"
                 >Login</a
               >
             </li>
@@ -54,13 +55,13 @@
                 @click.prevent="tab = 'register'"
                 :class="{
                   'hover:text-white text-white bg-blue-600': tab === 'register',
-                  'hover:text-blue-600': tab === 'login'
+                  'hover:text-blue-600': tab === 'login',
                 }"
                 >Register</a
               >
             </li>
           </ul>
-          
+
           <app-login-form v-if="tab === 'login'" />
           <app-register-form v-else />
         </div>
@@ -71,9 +72,9 @@
 
 <script>
 import { mapState, mapWritableState } from "pinia";
-import useModalStore from "../stores/module";
-import AppLoginForm from "./LoginFrom.vue"
-import AppRegisterForm from "./RegisterForm.vue"
+import useModalStore from "@/stores/modal";
+import AppLoginForm from "@/components/LoginForm.vue";
+import AppRegisterForm from "@/components/RegisterForm.vue";
 
 export default {
   name: "Auth",
@@ -92,5 +93,6 @@ export default {
       modalVisibility: "isOpen",
     }),
   },
+  methods: {},
 };
 </script>

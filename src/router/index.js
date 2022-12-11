@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import About from "../views/About.vue";
-import Manage from "../views/Manage.vue";
-import Song from "../views/Song.vue";
-import useUserStore from "../stores/user";
+import Home from "@/views/Home.vue";
+import About from "@/views/About.vue";
+import Manage from "@/views/Manage.vue";
+import useUserStore from "@/stores/user";
+import Song from "@/views/Song.vue";
 
 const routes = [
   {
@@ -18,16 +18,16 @@ const routes = [
   },
   {
     name: "manage",
-    // alias: '/manage'
+    // alias: "/manage",
     path: "/manage-music",
     component: Manage,
-    beforeEach: () => {
-      console.log('Manage Route Guard');
+    beforeEnter(to, from, next) {
+      console.log("Manage Route Guard");
       next();
     },
     meta: {
       requiresAuth: true,
-    }
+    },
   },
   {
     path: "/manage",
@@ -36,13 +36,13 @@ const routes = [
   {
     name: "song",
     path: "/song/:id",
-    component: Song
+    component: Song,
   },
   {
     path: "/:catchAll(.*)*",
     redirect: { name: "home" },
   },
-]
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,20 +51,20 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("Global Guard");
-  
-  if(!to.meta.requiresAuth) {
+  // console.log("Global Guard");
+
+  if (!to.meta.requiresAuth) {
     next();
     return;
   }
-  
-  
+
   const store = useUserStore();
-  if(store.userLoggedIn) {
-    next()
+
+  if (store.userLoggedIn) {
+    next();
   } else {
-    next({ name: "home" })
+    next({ name: "home" });
   }
-})
+});
 
 export default router;
