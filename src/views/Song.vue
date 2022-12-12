@@ -119,6 +119,7 @@ export default {
         if (this.sort === "1") {
           return new Date(b.datePosted) - new Date(a.datePosted);
         }
+
         return new Date(a.datePosted) - new Date(b.datePosted);
       });
     },
@@ -132,6 +133,7 @@ export default {
     }
 
     const { sort } = this.$route.query;
+
     this.sort = sort === "1" || sort === "2" ? sort : "1";
 
     this.song = docSnapshot.data();
@@ -166,12 +168,14 @@ export default {
       this.comment_in_submission = false;
       this.comment_alert_variant = "bg-green-500";
       this.comment_alert_message = "Comment added!";
+
       resetForm();
     },
     async getComments() {
       const snapshots = await commentsCollection
         .where("sid", "==", this.$route.params.id)
         .get();
+
       this.comments = [];
 
       snapshots.forEach((doc) => {
