@@ -9,7 +9,7 @@
   <vee-form :validation-schema="loginSchema" @submit="login">
     <!-- Email -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Email</label>
+      <label class="inline-block mb-2">{{ $t("auth.logInForm.email") }}</label>
       <vee-field
         name="email"
         type="email"
@@ -20,7 +20,7 @@
     </div>
     <!-- Password -->
     <div class="mb-3">
-      <label class="inline-block mb-2">Password</label>
+      <label class="inline-block mb-2">{{ $t("auth.logInForm.password") }}</label>
       <vee-field
         name="password"
         type="password"

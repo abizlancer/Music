@@ -1,0 +1,38 @@
+{
+  "home": {
+    "listen": "Listen to Great Music!",
+    "songsList": "Songs",
+    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus et dolor mollis, congue augue non, venenatis elit. Nunc justo eros, suscipit ac aliquet imperdiet, venenatis et sapien. Duis sed magna pulvinar, fringilla lorem eget, ullamcorper urna.",
+    "header": {
+      "about": "About",
+      "logReg": "Login / Register",
+      "manage": "Manage",
+      "logOut": "Logout"
+    }
+  },
+  "auth": {
+    "title": "Your Account",
+    "logIn": "Login",
+    "register": "Register",
+    "name": "Name",
+    "email": "Email",
+    "age": "Age",
+    "password": "Password",
+    "confirm": "Confirm Password",
+    "country": "Country",
+    "logInForm": {
+      "password": "Password",
+      "email": "Email"
+    }
+  },
+  "song": {
+    "comment_count": "No comments | 1 comment | {count} comments"
+  },
+  "register": {
+    "accept": "I accept Music's {0}",
+    "tos": "Terms of Service"
+  },
+  "manage": {
+    "my_songs": "My Songs"
+  }
+}
