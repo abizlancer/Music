@@ -1,5 +1,5 @@
 import SongItem from "@/components/SongItem.vue"
-import { shallowMount } from "@vue/test-utils"
+import { RouterLinkStub, shallowMount } from "@vue/test-utils"
 
 describe("SontItem.vue", () => {
     test("render song.display_name", () => {
@@ -10,9 +10,32 @@ describe("SontItem.vue", () => {
         const wrapper = shallowMount(SongItem, {
             propsData: {
                 song,
+            },
+            global: {
+                components: {
+                    'router-link': RouterLinkStub
+                }
             }
         })
+        const compositionAuthor = wrapper.find('.text-gray-500')
+        expect(compositionAuthor.text()).toBe(song.display_name);
+    });
+    test("render song.docId in id attribute", () => {
+        const song = {
+            docId: 'abc',
+        }
         
-        expect(wrapper.text()).toContain(song.display_name);
+        const wrapper = shallowMount(SongItem, {
+            propsData: {
+                song,
+            },
+            global: {
+                components: {
+                    'router-link': RouterLinkStub
+                }
+            }
+        })
+        // expect(wrapper.attributes().id).toBe(song.docId);
+        expect(wrapper.classes()).toContain(`song-id-${song.docId}`);
     });
 })
